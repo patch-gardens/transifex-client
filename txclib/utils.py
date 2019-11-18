@@ -146,11 +146,10 @@ def _prepare_url_request(host, username, password):
     # Initialize http and https pool managers
     num_pools = 1
     managers = {}
-
     if host.lower().startswith("http://"):
         scheme = "http"
         if os.environ.get("http_proxy"):
-            proxy_url = urllib3.util.url.parse_url(os.environ["http_proxy"])
+            proxy_url = urllib3.util.url.parse_url(scheme + "://" + os.environ["http_proxy"])
             managers["http"] = urllib3.ProxyManager(
                 proxy_url=proxy_url.url,
                 proxy_headers=urllib3.util.make_headers(
@@ -163,7 +162,7 @@ def _prepare_url_request(host, username, password):
     elif host.lower().startswith("https://"):
         scheme = "https"
         if os.environ.get("https_proxy"):
-            proxy_url = urllib3.util.url.parse_url(os.environ["https_proxy"])
+            proxy_url = urllib3.util.url.parse_url(scheme + "://" + os.environ["https_proxy"])
             managers["https"] = urllib3.ProxyManager(
                 proxy_url=proxy_url.url,
                 proxy_headers=urllib3.util.make_headers(
