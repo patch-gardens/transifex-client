@@ -17,7 +17,8 @@ git clone https://github.com/transifex/txci.git
 cd txci
 rm -rf .tx
 $TX init --host="https://www.transifex.com" --skipsetup --no-interactive
-$TX config mapping -r $TRANSIFEX_PROJECT.$BRANCH\_$TRANSIFEX_USER\_$RANDOM -s en 'locale/<lang>/LC_MESSAGES/django.po' -t PO --execute
+export TX_COMBINED_SLUG=$TRANSIFEX_PROJECT.$BRANCH\_$TRANSIFEX_USER\_$RANDOM
+$TX config mapping -r $TX_COMBINED_SLUG -s en 'locale/<lang>/LC_MESSAGES/django.po' -t PO --execute
 
 # push/pull without XLIFF
 echo "Pushing Source..."
@@ -64,4 +65,5 @@ echo "Pushing xliff for pt_BR"
 $TX --traceback push -t -l pt_BR --xliff -f --no-interactive
 
 
-$TX --traceback delete -f
+$TX --traceback delete -r $TX_COMBINED_SLUG -f
+
